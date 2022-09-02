@@ -26,9 +26,9 @@ jobs:
       run: npm install -g newman-reporter-allure
     - name: Run API tests
       run: npm run petstore:allureReport
-    #- name: Generate Report
-    #  if: always()
-     # run: npm run allure:serve
+    - name: Generate Report
+      if: always()
+      run: npm run allure:generate
     - name: Upload Results
       uses: actions/upload-artifact@v1
       if: always()
