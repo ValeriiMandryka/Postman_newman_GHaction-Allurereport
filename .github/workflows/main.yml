@@ -28,6 +28,9 @@ jobs:
       run: npm run petstore:allureReport
     - name: Generate report
       if: always()
+      run: npm run allure:serve
+    - name: Generate report
+      if: always()
       run: npm run allure:generate
     - name: Deploy to pages
       if: always()
