@@ -1,0 +1,35 @@
+name: GH-Actions-postman-newman
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+ test-run:
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v2
+      with:
+          node-version: '14.x'
+    - name: Install dependencies
+      run: npm i
+    - name: Install Newman
+      run: npm install -g newman
+    - name: Install newman Allure rporter
+      run: npm install -g newman-reporter-allure
+    - name: Run API tests
+      run: npm run petstore:allureReport
+    - name: Deploy to pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v3.7.3
+      with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./results
