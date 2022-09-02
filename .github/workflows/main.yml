@@ -22,10 +22,12 @@ jobs:
       run: npm ci
     - name: Install Newman
       run: npm install -g newman
-    - name: Install newman HTML rporter
+    - name: Install newman Allure rporter
       run: npm install -g newman-reporter-allure
     - name: Run API tests
       run: npm run petstore:allureReport
+    - name: Install newman Allure rporter
+      run: npm run allure:generate
     - name: Deploy to pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3.7.3
