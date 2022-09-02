@@ -26,21 +26,6 @@ jobs:
       run: npm install -g newman-reporter-allure
     - name: Run API tests
       run: npm run petstore:allureReport
-    - name: Generate Report
-      if: always()
-      run: npm run allure:generate
-    - name: Upload Results
-      uses: actions/upload-artifact@v1
-      if: always()
-      with:
-          name: allure-results
-          path: allure-results/
-    - name: Publishing Allure artifact to Github Actions
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-          name: allure-report
-          path: allure-results/   
     - name: Deploy to pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3.7.3
