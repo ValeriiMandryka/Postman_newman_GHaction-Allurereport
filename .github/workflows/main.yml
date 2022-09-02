@@ -21,12 +21,13 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Install Newman
-      run: npm install -g newman
+      run: npm install  newman
     - name: Install newman Allure rporter
-      run: npm install -g newman-reporter-allure
+      run: npm install  newman-reporter-allure
     - name: Run API tests
       run: npm run petstore:allureReport
-    - name: Install newman Allure rporter
+    - name: Generate report
+      if: always()
       run: npm run allure:generate
     - name: Deploy to pages
       if: always()
