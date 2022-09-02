@@ -5,7 +5,7 @@ on:
     branches: [ "main", "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
-  #workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
  test-run:
@@ -19,10 +19,10 @@ jobs:
       with:
           node-version: '14.x'
     - name: Install dependencies
-      run: npm i
+      run: npm ci
     - name: Install Newman
       run: npm install -g newman
-    - name: Install newman Allure rporter
+    - name: Install newman HTML rporter
       run: npm install -g newman-reporter-allure
     - name: Run API tests
       run: npm run petstore:allureReport
@@ -32,5 +32,4 @@ jobs:
       with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-results/
-    
+          publish_dir: ./results
