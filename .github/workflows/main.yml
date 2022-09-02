@@ -23,7 +23,7 @@ jobs:
     - name: Install Newman
       run: npm install -g newman
     - name: Install newman Allure rporter
-      run: npm install -g  newman-reporter-allure
+      run: npm install -g newman-reporter-allure
     - name: Run API tests
       run: npm run petstore:allureReport
     - name: Generate report
