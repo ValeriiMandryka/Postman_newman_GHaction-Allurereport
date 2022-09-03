@@ -5,7 +5,7 @@ on:
     branches: [ "main", "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+ # workflow_dispatch:
 
 jobs:
  test-run:
@@ -24,15 +24,17 @@ jobs:
       run: npm install -g newman
     - name: Install newman Allure rporter
       run: npm install -g newman-reporter-allure
+    - name: Install newman Allure rporter
+      run: npm install -g allure-commandline --save-dev
     - name: Run API tests
-      run: npm run petstore:allureReport
+      run: newman run petstore.collection.json -r allure
     - name: Generate report
       if: always()
-      run: npx allure generate --clean
+      run: allure generate --clean
     - name: Deploy to pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3.7.3
       with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-results
+          publish_dir: allure-report
