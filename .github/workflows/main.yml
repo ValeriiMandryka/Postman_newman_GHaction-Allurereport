@@ -27,7 +27,7 @@ jobs:
     - name: Install newman Allure rporter
       run: npm install -g allure-commandline --save-dev
     - name: Run API tests
-      run: newman run petstore.collection.json -r allure
+      run: newman run petstore.collection.json -r cli,allure
     - name: Generate report
       if: always()
       run: allure generate --clean
