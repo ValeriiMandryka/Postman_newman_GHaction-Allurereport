@@ -1,4 +1,4 @@
 "Epic","Feature","Story","FAILED","BROKEN","PASSED","SKIPPED","UNKNOWN"
-"","Pet","pet/:petId","3","0","0","0","0"
-"","Pet","pet/findByTags","0","0","1","0","0"
+"","Pet","pet/:petId","1","0","2","0","0"
 "","Pet","pet/findByStatus","0","0","1","0","0"
+"","Pet","pet/findByTags","0","0","1","0","0"
