@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "4a0f5191-a707-404b-9e37-a6711475a264",
+		"_postman_id": "2ec58a3e-ecb7-4d4a-8a7e-1e2521afacaa",
 		"name": "petstore",
 		"description": "This is a sample server Petstore server. For this sample, you can use the api key `special-key` to test the authorization filters.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18317683"
+		"_exporter_id": "13496333"
 	},
 	"item": [
 		{
@@ -205,8 +205,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    pm.test(\"Successful POST request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([200,404]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -567,8 +568,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    pm.test(\"Successful POST request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([200,404]);\r",
 									"});"
 								],
 								"type": "text/javascript"
