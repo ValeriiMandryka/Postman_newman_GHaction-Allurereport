@@ -1,0 +1,641 @@
+{
+	"info": {
+		"_postman_id": "aaefb315-0701-474a-bbda-24189d2c0273",
+		"name": "store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13496333"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "List products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Test response time.\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//Test status code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful POST request (Status code is not 300,400,500)\", () => {\r",
+									"  pm.expect(pm.response.code).to.not.be.oneOf([300,400,500]);\r",
+									"});\r",
+									"// Testing headers\r",
+									"pm.test(\"Content-Type header is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"//Test response thanks to json schema validation\r",
+									"const schema = {\r",
+									"  \"properties\": {\r",
+									"    \"id\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"   \"name\": {\r",
+									"       \"type\": \"string\"\r",
+									"   },\r",
+									"   \"price\": {\r",
+									"       \"type\": \"number\"\r",
+									"   },\r",
+									"   \"sku\": {\r",
+									"       \"type\": \"number\"\r",
+									"   },\r",
+									"   \"description\": {\r",
+									"       \"type\": \"string\"\r",
+									"   }\r",
+									"  }\r",
+									"};\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"//Check that body contains string \"name\"\r",
+									"pm.test(\"Body contains string\",() => {\r",
+									"  pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"});\r",
+									"//Test for a response header having a particular value\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+									"});\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+									"});\r",
+									"pm.test(\"The response has correct id\", () => {\r",
+									"    //parse the response JSON and test  properties of id\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.id).to.eql(3);\r",
+									"});\r",
+									"let schema = {\r",
+									"    \"definitions\": {\r",
+									"        \"GetProductByID3\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"additionalProperties\": false,\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"name\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"price\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"sku\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"description\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                }\r",
+									"            },\r",
+									"            \"required\": [\r",
+									"                \"description\",\r",
+									"                \"id\",\r",
+									"                \"name\",\r",
+									"                \"price\",\r",
+									"                \"sku\"\r",
+									"            ],\r",
+									"            \"title\": \"GetProductByID3\"\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"pm.test(\"Response property matches environment variable\", function () {\r",
+									"  pm.expect(pm.response.json().baseUrl).to.eql(pm.environment.get(\"http://localhost:3000\"));\r",
+									"});\r",
+									"pm.test(\"The response has all properties\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.hasOwnProperty([\"id\",\"name\",\"price\",\"sku\",\"description\"]);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test pagination",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+									"});\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+									"});\r",
+									"pm.test(\"Verify that on a page shows 2 items \", () => {\r",
+									"    //parse the response JSON and test three properties\r",
+									"    const responseJson = pm.response.json();\r",
+									"   pm.expect(responseJson).to.have.lengthOf(2);\r",
+									"\r",
+									"});\r",
+									"let schema = {\r",
+									"    \r",
+									"    \"type\": \"array\",\r",
+									"        \"definitions\": {\r",
+									"        \"Page pagination\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"additionalProperties\": false,\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                    \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"firstName\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"lastName\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"email\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"dateOfBirth\": {\r",
+									"                    \"type\": \"string\",\r",
+									"                    \"format\": \"date\"\r",
+									"                },\r",
+									"                \"emailVerified\": {\r",
+									"                    \"type\": \"boolean\"\r",
+									"                },\r",
+									"                \"signUpDate\": {\r",
+									"                    \"type\": \"string\",\r",
+									"                    \"format\": \"date\"\r",
+									"                },\r",
+									"                \"status\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                },\r",
+									"                \"level\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                }\r",
+									"            },\r",
+									"            \"required\": [\r",
+									"                \"dateOfBirth\",\r",
+									"                \"email\",\r",
+									"                \"emailVerified\",\r",
+									"                \"firstName\",\r",
+									"                \"id\",\r",
+									"                \"lastName\",\r",
+									"                \"level\",\r",
+									"                \"signUpDate\",\r",
+									"                \"status\"\r",
+									"            ]\r",
+									"           \r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products?page=1&pageSize=2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sort by name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var _ = require('lodash'),\r",
+									"\r",
+									"    // Parse the array returned in the response body (It is probably a stringified response)\r",
+									"    responseArray = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test('Employee names are in sorted order', () => {\r",
+									"    // Use the responseArray here\r",
+									"    var expectedSortedOrder = _.orderBy(responseArray, ['id'],['asc']);\r",
+									"\r",
+									"    pm.expect(responseArray).to.eql(expectedSortedOrder);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products?sortOrder=ASC&sortKey=id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "sortOrder",
+									"value": "ASC"
+								},
+								{
+									"key": "sortKey",
+									"value": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});pm.test(\"Status code name has string\", () => {\r",
+									"  pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"The response has all properties\", () => {\r",
+									"    //parse the response JSON and test three properties\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.name).to.eql('orange');\r",
+									"    pm.expect(responseJson.price).to.eql(8);\r",
+									"    pm.expect(responseJson.sku).to.eql(123321123);\r",
+									"    pm.expect(responseJson.description).to.eql(\"wouh\");\r",
+									"});\r",
+									"pm.test(\"The response has all properties\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.hasOwnProperty(\"id\");\r",
+									"})\r",
+									"const schema = {\r",
+									"    \"properties\":{\r",
+									"        \"name\": { \"type\" : \"string\" },\r",
+									"        \"price\": { \"type\" : \"number\" },\r",
+									"        \"sku\": { \"type\" : \"number\" },\r",
+									"        \"description\": { \"type\" : \"string\" },\r",
+									"        \"id\": { \"type\" : \"number\" },\r",
+									"    }\r",
+									"    \r",
+									"};\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"orange\",\r\n    \"price\": 8,\r\n    \"sku\": 123321123,\r\n    \"description\": \"wouh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create product with wrong type of propety  in field price",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Если  я правильно понимаю то \"price\": имеет { \"type\" : \"number\" }, согласно проверки \r",
+									"//схема валидации, а почему то новый продукт создался. Или я не правильно розсуждаю?\r",
+									"//Если можно ответ в ревью. Спсибо\r",
+									"\r",
+									"pm.test(\"Status code  400\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400,403]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"name\": \"orange\",\r\n        \"price\": \"banana\",\r\n        \"sku\": 123321123,\r\n        \"description\": \"wouh\",\r\n        \"id\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "XSS injection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Целесообразно ли проводить данную проверки в Postman или достаточно будет провести \r",
+									"//проверку - schema validation, которая проверит тип возможных вводов в поле и данный\r",
+									"//скрипт будет сохранятся как \"string\"?\r",
+									"// В запросе \"Create product with wrong type... \", почемуто не выдало ошибку а сохранилось \r",
+									"//с статусом 200 "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"name\": \"<sxript>alert('XSS is here')</script>\",\r\n        \"price\": \"banana\",\r\n        \"sku\": 123321123,\r\n        \"description\": \"wouh\",\r\n        \"id\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});pm.test(\"Status code name has string\", () => {\r",
+									"  pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"The response has all properties\", () => {\r",
+									"    //parse the response JSON and test three properties\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.name).to.eql('banana');\r",
+									"    pm.expect(responseJson.price).to.eql(155);\r",
+									"    pm.expect(responseJson.sku).to.eql(123321123);\r",
+									"    pm.expect(responseJson.description).to.eql(\"changed description\");\r",
+									"    pm.expect(responseJson.id).to.eql(5);\r",
+									"});\r",
+									"pm.test(\"The response has all properties\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.hasOwnProperty(\"id\");\r",
+									"})\r",
+									"const schema = {\r",
+									"    \"properties\":{\r",
+									"        \"name\": { \"type\" : \"string\" },\r",
+									"        \"price\": { \"type\" : \"number\" },\r",
+									"        \"sku\": { \"type\" : \"number\" },\r",
+									"        \"description\": { \"type\" : \"string\" },\r",
+									"        \"id\": { \"type\" : \"number\" },\r",
+									"    }\r",
+									"    \r",
+									"};\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":5,\r\n    \"name\": \"banana\",\r\n    \"price\": 155,\r\n    \"sku\": 123321123,\r\n    \"description\": \"changed description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove product by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check deleted id\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(5);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
